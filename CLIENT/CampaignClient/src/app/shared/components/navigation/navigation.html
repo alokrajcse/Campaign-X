@@ -1,0 +1,51 @@
+<!-- Mobile Menu Button -->
+<button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+ 
+</button>
+
+<!-- Mobile Overlay -->
+<div class="mobile-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+<div class="sidebar" [class.mobile-open]="isMobileMenuOpen">
+  <div class="sidebar-header">
+    <h3>Campaign X</h3>
+    <button class="mobile-close-btn" (click)="closeMobileMenu()">X</button>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <a routerLink="/campaigns" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <span class="nav-text">Dashboard</span>
+    </a>
+    <a routerLink="/campaigns/overview" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <span class="nav-text">Overview</span>
+    </a>
+    <a routerLink="/campaigns/add-lead" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <span class="nav-text">Add Lead</span>
+    </a>
+    <a routerLink="/campaigns/bulk-upload" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <span class="nav-text">Bulk Upload</span>
+    </a>
+    <a routerLink="/campaigns/search" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <span class="nav-text">Search</span>
+    </a>
+    <a routerLink="/campaigns/leads" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <span class="nav-text">View Leads</span>
+    </a>
+    <a routerLink="/profile" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <span class="nav-text">Profile</span>
+    </a>
+  </nav>
+  
+  <div class="sidebar-footer">
+    <div class="session-timer">
+      <span class="timer-text">{{formatTime(remainingTime)}} Time Left</span>
+    </div>
+    <button class="logout-btn" (click)="logout()">
+      <span class="nav-text">Logout</span>
+    </button>
+  </div>
+</div>

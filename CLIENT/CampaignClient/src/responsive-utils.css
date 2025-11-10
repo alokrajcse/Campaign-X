@@ -1,0 +1,100 @@
+/* Responsive Utility Classes */
+
+/* Hide/Show on different screen sizes */
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block;
+  }
+  
+  .desktop-only {
+    display: none;
+  }
+  
+  .mobile-hide {
+    display: none !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+  }
+  
+  .mobile-text-center {
+    text-align: center !important;
+  }
+  
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+  
+  .mobile-no-padding {
+    padding: 0 !important;
+  }
+  
+  .mobile-small-padding {
+    padding: 10px !important;
+  }
+}
+
+/* Tablet specific utilities */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tablet-hide {
+    display: none !important;
+  }
+  
+  .tablet-full-width {
+    width: 100% !important;
+  }
+}
+
+/* Touch-friendly button sizes */
+@media (max-width: 768px) {
+  button, .btn, input[type="submit"], input[type="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Responsive text sizes */
+@media (max-width: 480px) {
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.1rem; }
+  h4 { font-size: 1rem; }
+}
+
+/* Responsive spacing */
+.responsive-margin {
+  margin: 20px;
+}
+
+.responsive-padding {
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .responsive-margin {
+    margin: 10px;
+  }
+  
+  .responsive-padding {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-margin {
+    margin: 5px;
+  }
+  
+  .responsive-padding {
+    padding: 5px;
+  }
+}

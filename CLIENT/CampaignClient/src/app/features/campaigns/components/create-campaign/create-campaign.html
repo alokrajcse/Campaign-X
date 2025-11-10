@@ -1,0 +1,59 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Create New Campaign</h3>
+
+    <form #form="ngForm" (ngSubmit)="onSubmit(form.value)">
+      
+      <div class="form-group">
+        <label>Campaign Name *</label>
+        <input name="name" class="form-control" placeholder="Enter campaign name" ngModel required>
+      </div>
+
+      <div class="form-group">
+        <label>Start Date *</label>
+        <input name="startDate" type="date" class="form-control" ngModel required>
+      </div>
+
+      <div class="form-group">
+        <label>End Date *</label>
+        <input name="endDate" type="date" class="form-control" ngModel required>
+      </div>
+
+      <div class="form-group">
+        <label>Agency</label>
+        <select name="agency" class="form-control" ngModel>
+          <option value="">Select Agency</option>
+          <option value="Agency A">Agency A</option>
+          <option value="Agency B">Agency B</option>
+          <option value="Agency C">Agency C</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Buyer</label>
+        <select name="buyer" class="form-control" ngModel>
+          <option value="">Select Buyer</option>
+          <option value="Buyer X">Buyer X</option>
+          <option value="Buyer Y">Buyer Y</option>
+          <option value="Buyer Z">Buyer Z</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Brand</label>
+        <select name="brand" class="form-control" ngModel>
+          <option value="">Select Brand</option>
+          <option value="Brand One">Brand One</option>
+          <option value="Brand Two">Brand Two</option>
+          <option value="Brand Three">Brand Three</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Create</button>
+      </div>
+    </form>
+
+  </div>
+</div>

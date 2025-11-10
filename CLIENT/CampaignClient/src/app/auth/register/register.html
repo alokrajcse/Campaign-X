@@ -1,0 +1,56 @@
+<div class="signup-container">
+  <div class="signup-box">
+    <div class="brand-header">
+      <h1 class="brand-name">Campaign X</h1>
+      <p class="brand-tagline">Marketing Campaign Management</p>
+    </div>
+    <h2>Sign Up</h2>
+    
+    <form>
+      <div class="input-group">
+        <input 
+          type="text" 
+          [(ngModel)]="username" 
+          name="username"
+          placeholder="Username"
+          required>
+        <div class="error" *ngIf="errors.username">{{errors.username}}</div>
+      </div>
+      
+      <div class="input-group">
+        <input 
+          type="email" 
+          [(ngModel)]="email" 
+          name="email"
+          placeholder="Email"
+          required>
+        <div class="error" *ngIf="errors.email">{{errors.email}}</div>
+      </div>
+      
+      <div class="input-group">
+        <input 
+          type="password" 
+          [(ngModel)]="password" 
+          name="password"
+          placeholder="Password"
+          required>
+        <div class="error" *ngIf="errors.password">{{errors.password}}</div>
+      </div>
+      
+      <div class="input-group">
+        <select 
+          [(ngModel)]="organizationId" 
+          name="organization"
+          required>
+          <option value="0">Select Organization</option>
+          <option *ngFor="let org of organizations" [value]="org.id">{{org.name}}</option>
+        </select>
+        <div class="error" *ngIf="errors.organization">{{errors.organization}}</div>
+      </div>
+      
+      <button type="button" (click)="register()" class="signup-btn">Sign Up</button>
+    </form>
+    
+    <p class="login-link">Already have an account? <a routerLink="/login">Login</a></p>
+  </div>
+</div>

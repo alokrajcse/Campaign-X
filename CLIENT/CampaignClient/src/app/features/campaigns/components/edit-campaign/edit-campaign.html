@@ -1,0 +1,62 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Edit Campaign</h3>
+    <form [formGroup]="campaignForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Campaign Name *</label>
+        <input formControlName="name" class="form-control" placeholder="Enter campaign name">
+      </div>
+      <div class="form-group">
+        <label>Start Date *</label>
+        <input formControlName="startDate" type="date" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>End Date *</label>
+        <input formControlName="endDate" type="date" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Agency</label>
+        <select formControlName="agency" class="form-control">
+          <option value="">Select Agency</option>
+          <option value="Agency A">Agency A</option>
+          <option value="Agency B">Agency B</option>
+          <option value="Agency C">Agency C</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Buyer</label>
+        <select formControlName="buyer" class="form-control">
+          <option value="">Select Buyer</option>
+          <option value="Buyer X">Buyer X</option>
+          <option value="Buyer Y">Buyer Y</option>
+          <option value="Buyer Z">Buyer Z</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Brand</label>
+        <select formControlName="brand" class="form-control">
+          <option value="">Select Brand</option>
+          <option value="Brand One">Brand One</option>
+          <option value="Brand Two">Brand Two</option>
+          <option value="Brand Three">Brand Three</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select formControlName="status" class="form-control">
+          <option value="Draft">Draft</option>
+          <option value="Active">Active</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+      <div class="form-error" *ngIf="getFormError()">{{getFormError()}}</div>
+      
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="campaignForm.invalid || loading">
+          {{loading ? 'Updating...' : 'Update'}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,136 @@
+<app-navigation></app-navigation>
+<div class="main-content">
+  <div class="leads-container">
+    <header class="page-header">
+      <h2>All Leads</h2>
+    </header>
+
+    <div class="filters-section">
+      <div class="filter-inputs">
+        <input [(ngModel)]="filters.campaign" placeholder="Filter by Campaign" (input)="applyFilters()">
+        <input [(ngModel)]="filters.segment" placeholder="Filter by Segment" (input)="applyFilters()">
+        <input [(ngModel)]="filters.email" placeholder="Filter by Email" (input)="applyFilters()">
+        <button (click)="resetFilters()">Reset</button>
+      </div>
+      <div class="export-section">
+        <button class="export-btn" (click)="exportLeads()" [disabled]="filteredLeads.length === 0">
+          Export
+        </button>
+      </div>
+    </div>
+
+    <div class="leads-table" *ngIf="!loading">
+      <table>
+        <thead>
+          <tr>
+            <th>Lead ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Campaign</th>
+            <th>Segment</th>
+            <th>Status</th>
+            <th>Created Date</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let lead of paginatedLeads">
+            <td>{{lead.leadId}}</td>
+            <td>{{lead.name}}</td>
+            <td>{{lead.email}}</td>
+            <td>{{lead.phone}}</td>
+            <td>{{lead.campaignId}}</td>
+            <td class="segment">{{lead.segment}}</td>
+            <td class="status">{{lead.status}}</td>
+            <td>{{formatDate(lead.createdDate)}}</td>
+            <td class="actions-column">
+              <img src="/icons/pen.png" class="action-icon" (click)="editLead(lead)" title="Edit">
+              <img src="/icons/bin.png" class="action-icon" (click)="deleteLead(lead)" title="Delete">
+            </td>
+          </tr>
+          <tr *ngIf="filteredLeads.length === 0">
+            <td colspan="9" class="no-data">No leads found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="loading" *ngIf="loading">Loading leads...</div>
+
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+      <span>Page {{currentPage}} of {{totalPages}}</span>
+      <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Edit Lead</h3>
+      <form [formGroup]="editForm" (ngSubmit)="saveEdit()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Name</label>
+            <input formControlName="name" type="text">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input formControlName="email" type="email">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone</label>
+            <input formControlName="phone" type="text">
+          </div>
+          <div class="form-group">
+            <label>Campaign</label>
+            <select formControlName="campaignId">
+              <option value="">Select Campaign</option>
+              <option *ngFor="let campaign of campaigns" [value]="campaign">{{campaign}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Segment</label>
+            <input formControlName="segment" type="text">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select formControlName="status">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email Opened</label>
+            <select formControlName="openRate">
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Clicks</label>
+            <input formControlName="clickRate" type="number" min="0" max="10">
+          </div>
+          <div class="form-group">
+            <label>Conversions</label>
+            <select formControlName="conversions">
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" [disabled]="editForm.invalid">Save</button>
+          <button type="button" (click)="closeEditModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

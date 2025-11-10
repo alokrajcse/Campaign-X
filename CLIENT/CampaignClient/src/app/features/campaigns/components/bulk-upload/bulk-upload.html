@@ -1,0 +1,76 @@
+<app-navigation></app-navigation>
+<div class="main-content">
+  <div class="bulk-upload-container">
+  <header class="page-header">
+    <h2>Bulk Upload Leads</h2>
+  </header>
+
+  <div class="upload-section">
+    <div class="file-upload">
+      <input type="file" (change)="onFileSelected($event)" accept=".xlsx,.csv" id="fileInput">
+      <label for="fileInput" class="upload-btn">Choose File</label>
+      <span *ngIf="selectedFile">{{selectedFile.name}}</span>
+      <button class="sample-btn" (click)="downloadSample()">Download Sample</button>
+    </div>
+
+    <div class="validation-errors" *ngIf="validationErrors.length > 0">
+      <h3>Validation Errors:</h3>
+      <ul>
+        <li *ngFor="let error of validationErrors" class="error">{{error}}</li>
+      </ul>
+    </div>
+
+    <div class="preview-section" *ngIf="previewData.length > 0">
+      <h3>Preview Data ({{previewData.length}} leads)</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Lead ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Campaign</th>
+              <th>Assigned Segment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lead of paginatedData">
+              <td>{{lead.leadId}}</td>
+              <td>{{lead.name}}</td>
+              <td>{{lead.email}}</td>
+              <td>{{lead.phone}}</td>
+              <td>{{lead.campaignId}}</td>
+              <td class="segment">{{lead.segment}}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="pagination" *ngIf="totalPages > 1">
+          <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+          <span>Page {{currentPage}} of {{totalPages}}</span>
+          <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+        </div>
+      </div>
+
+      <div class="upload-actions">
+        <button 
+          class="upload-btn-action" 
+          (click)="uploadLeads()" 
+          [disabled]="validationErrors.length > 0 || isProcessing">
+          {{isProcessing ? 'Processing...' : 'Upload Leads'}}
+        </button>
+      </div>
+    </div>
+
+    <div class="upload-result" *ngIf="uploadResult">
+      <h3>Upload Summary</h3>
+      <div class="result-stats">
+        <div class="stat success">Successfully Uploaded: {{uploadResult.successCount || 0}}</div>
+        <div class="stat error">Failed: {{uploadResult.failedCount || 0}}</div>
+        <div class="stat info">Total Rows: {{uploadResult.totalRows || 0}}</div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

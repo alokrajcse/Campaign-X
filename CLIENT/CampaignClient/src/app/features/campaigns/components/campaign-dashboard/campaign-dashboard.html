@@ -1,0 +1,147 @@
+<app-navigation></app-navigation>
+<div class="main-content">
+  <app-loading *ngIf="loading"></app-loading>
+  <div class="dashboard-container">
+  <div class="error-message" *ngIf="error">{{error}}</div>
+  
+  <div class="summary-cards">
+    <div class="summary-card">
+      <h3>{{campaigns.length}}</h3>
+      <p>Total Campaigns</p>
+    </div>
+    <div class="summary-card">
+      <h3>{{getTotalLeads()}}</h3>
+      <p>Total Leads</p>
+    </div>
+    <div class="summary-card">
+      <h3>{{getAvgOpenRate()}}%</h3>
+      <p>Avg Open Rate</p>
+    </div>
+    <div class="summary-card">
+      <h3>{{getAvgConversionRate()}}%</h3>
+      <p>Avg Conversion Rate</p>
+    </div>
+  </div>
+
+  <div class="filters-section">
+    <div class="filter-row">
+      <input [(ngModel)]="filters.name" placeholder="Campaign Name" (input)="applyFilters()">
+      <input type="date" [(ngModel)]="filters.startDate" (change)="applyFilters()">
+      <input type="date" [(ngModel)]="filters.endDate" (change)="applyFilters()">
+    </div>
+    
+    <div class="filter-row">
+      <div class="multi-select-dropdown">
+        <button class="dropdown-toggle" (click)="toggleDropdown('agencies')">
+          Agencies
+        </button>
+        <div class="dropdown-menu" *ngIf="dropdownStates.agencies">
+          <label *ngFor="let agency of agencies" class="dropdown-item">
+            <input type="checkbox" 
+                   [checked]="isSelected(filters.agencies, agency)"
+                   (change)="toggleSelection(filters.agencies, agency)">
+            {{agency}}
+          </label>
+        </div>
+      </div>
+      <div class="multi-select-dropdown">
+        <button class="dropdown-toggle" (click)="toggleDropdown('buyers')">
+          Buyers 
+        </button>
+        <div class="dropdown-menu" *ngIf="dropdownStates.buyers">
+          <label *ngFor="let buyer of buyers" class="dropdown-item">
+            <input type="checkbox" 
+                   [checked]="isSelected(filters.buyers, buyer)"
+                   (change)="toggleSelection(filters.buyers, buyer)">
+            {{buyer}}
+          </label>
+        </div>
+      </div>
+      <div class="multi-select-dropdown">
+        <button class="dropdown-toggle" (click)="toggleDropdown('brands')">
+          Brands 
+        </button>
+        <div class="dropdown-menu" *ngIf="dropdownStates.brands">
+          <label *ngFor="let brand of brands" class="dropdown-item">
+            <input type="checkbox" 
+                   [checked]="isSelected(filters.brands, brand)"
+                   (change)="toggleSelection(filters.brands, brand)">
+            {{brand}}
+          </label>
+        </div>
+      </div>
+      <button (click)="resetFilters()">Reset</button>
+    </div>
+  </div>
+
+  <div class="actions-section">
+    <button class="primary-btn" (click)="openCreateModal()">Create Campaign</button>
+    <button class="primary-btn" (click)="navigateToAddLead()">Add Lead</button>
+    <button class="primary-btn" (click)="navigateToBulkUpload()">Bulk Upload</button>
+    <button class="primary-btn" (click)="navigateToSearch()">Multi-Lead Search</button>
+    <button class="secondary-btn" (click)="exportData()">Export Analytics</button>
+    <button class="secondary-btn" (click)="refreshData()" [disabled]="loading">Refresh</button>
+  </div>
+
+  <div class="campaigns-table">
+    <table>
+      <thead>
+        <tr>
+          <th (click)="sort('name')" class="sortable">Campaign Name {{getSortIcon('name')}}</th>
+          <th (click)="sort('startDate')" class="sortable">Start Date {{getSortIcon('startDate')}}</th>
+          <th (click)="sort('endDate')" class="sortable">End Date {{getSortIcon('endDate')}}</th>
+          <th (click)="sort('totalLeads')" class="sortable">Total Leads {{getSortIcon('totalLeads')}}</th>
+          <th (click)="sort('openRate')" class="sortable">Open Rate {{getSortIcon('openRate')}}</th>
+          <th (click)="sort('conversionRate')" class="sortable">Conversion Rate {{getSortIcon('conversionRate')}}</th>
+          <th (click)="sort('status')" class="sortable">Status {{getSortIcon('status')}}</th>
+          <th class="actions-column">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let campaign of paginatedCampaigns">
+          <td>{{campaign.name}}</td>
+          <td>{{campaign.startDate | date}}</td>
+          <td>{{campaign.endDate | date}}</td>
+          <td>{{campaign.totalLeads}}</td>
+          <td>{{campaign.openRate}}%</td>
+          <td>{{campaign.conversionRate}}%</td>
+          <td>{{campaign.status}}</td>
+          <td class="actions-column">
+            <img src="/icons/visual.png" class="action-icon" (click)="viewCampaignDetails(campaign)" title="View">
+            <img src="/icons/pen.png" class="action-icon" (click)="editCampaign(campaign)" title="Edit">
+            <img src="/icons/bin.png" class="action-icon" (click)="deleteCampaign(campaign)" title="Delete">
+          </td>
+        </tr>
+        <tr *ngIf="filteredCampaigns.length === 0 && !loading">
+          <td colspan="7" class="no-data">No campaigns found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{currentPage}} of {{totalPages}}</span>
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+
+  <app-create-campaign 
+    *ngIf="showCreateModal"
+    (cancel)="closeCreateModal()"
+    (success)="onCampaignCreated($event)">
+  </app-create-campaign>
+
+  <app-edit-campaign 
+    *ngIf="showEditModal && editingCampaign"
+    [campaign]="editingCampaign"
+    (cancel)="closeEditModal()"
+    (success)="onCampaignUpdated($event)">
+  </app-edit-campaign>
+
+  <app-campaign-analytics 
+    *ngIf="showAnalyticsModal && analyticsCampaign"
+    [campaign]="analyticsCampaign"
+    (close)="closeAnalyticsModal()">
+  </app-campaign-analytics>
+  </div>
+</div>

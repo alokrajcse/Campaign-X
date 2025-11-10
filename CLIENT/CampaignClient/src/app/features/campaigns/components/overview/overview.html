@@ -1,0 +1,40 @@
+<app-navigation></app-navigation>
+<div class="main-content">
+<div class="overview-container">
+  <div class="overview-header">
+    <h2>Analytics Overview</h2>
+    <button class="refresh-btn" (click)="refreshData()">Refresh</button>
+  </div>
+
+  
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-value">{{campaignData.totalCampaigns}}</div>
+      <div class="metric-label">Total Campaigns</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{campaignData.totalLeads}}</div>
+      <div class="metric-label">Total Leads</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{campaignData.openRate}}%</div>
+      <div class="metric-label">Open Rate</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{campaignData.conversionRate}}%</div>
+      <div class="metric-label">Conversion Rate</div>
+    </div>
+  </div>
+
+  <!-- Charts Grid -->
+  <div class="charts-grid">
+    <div class="chart-container">
+      <canvas id="campaignChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="segmentChart"></canvas>
+    </div>
+    
+  </div>
+</div>
+</div>

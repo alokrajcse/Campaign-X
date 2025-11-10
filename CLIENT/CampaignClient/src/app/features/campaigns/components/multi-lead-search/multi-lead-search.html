@@ -1,0 +1,88 @@
+<app-navigation></app-navigation>
+<div class="main-content">
+  <div class="search-container">
+  <header class="page-header">
+    <h2>Multi-Lead Search</h2>
+  </header>
+
+  <div class="search-section">
+    <div class="search-input-section">
+      <label for="searchInput">Enter Lead IDs or Email Addresses (one per line):</label>
+      <textarea 
+        id="searchInput"
+        [(ngModel)]="searchInput" 
+        placeholder=" Enter name, email or lead ID to search"
+        rows="8">
+      </textarea>
+      
+      <div class="search-actions">
+        <button class="search-btn" (click)="searchLeads()" [disabled]="!searchInput.trim() || isSearching">
+          {{isSearching ? 'Searching...' : 'Search Leads'}}
+        </button>
+        <button class="clear-btn" (click)="clearSearch()">Clear</button>
+      </div>
+    </div>
+
+    <div class="search-results" *ngIf="searchResult">
+      <div class="results-header">
+        <h3>Search Results</h3>
+        <button class="export-btn" (click)="exportResults()">Export to Excel</button>
+      </div>
+
+      <div class="results-summary">
+        <div class="summary-item found">
+          <span class="count">{{searchResult.found.length || 0}}</span>
+          <span class="label">Found</span>
+        </div>
+        <div class="summary-item not-found">
+          <span class="count">{{searchResult.notFound.length || 0}}</span>
+          <span class="label">Not Found</span>
+        </div>
+      </div>
+
+      <div class="found-leads" *ngIf="searchResult.found && searchResult.found.length > 0">
+        <h4>Found Leads</h4>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Lead ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Campaign</th>
+                <th>Segment</th>
+                <th>Open Rate</th>
+                <th>Click Rate</th>
+                <th>Conversions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let lead of searchResult.found">
+                <td>{{lead.leadId}}</td>
+                <td>{{lead.name}}</td>
+                <td>{{lead.email}}</td>
+                <td>{{lead.phone}}</td>
+                <td>{{lead.campaignId}}</td>
+                <td>{{lead.segment}}</td>
+                <td>{{lead.openRate}}%</td>
+                <td>{{lead.clickRate}}%</td>
+                <td>{{lead.conversions}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="not-found-leads" *ngIf="searchResult.notFound && searchResult.notFound.length > 0">
+        <h4>Not Found</h4>
+        <div class="not-found-list">
+          <span *ngFor="let identifier of searchResult.notFound" class="not-found-item">
+            {{identifier}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

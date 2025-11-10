@@ -1,0 +1,82 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Campaign Analytics</h2>
+      <button class="close-btn" (click)="onClose()">×</button>
+    </div>
+    
+    <div class="campaign-info">
+      <h3>{{campaign.name}}</h3>
+      <p>{{formatDate(campaign.startDate)}} - {{formatDate(campaign.endDate)}}</p>
+    </div>
+
+    <div class="analytics-grid" *ngIf="!loading">
+      <div class="metric-card">
+        <div class="metric-value">{{campaign.totalLeads || 0}}</div>
+        <div class="metric-label">Total Leads</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-value">{{campaign.openRate || 0}}%</div>
+        <div class="metric-label">Email Open Rate</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-value">{{campaign.clickRate || 0}}%</div>
+        <div class="metric-label">Link Click Rate</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-value">{{campaign.conversionRate || 0}}%</div>
+        <div class="metric-label">Conversion Rate</div>
+      </div>
+
+      
+
+      <div class="metric-card">
+        <div class="metric-value">{{campaign.status}}</div>
+        <div class="metric-label">Status</div>
+      </div>
+    </div>
+
+    <div class="loading" *ngIf="loading">Loading analytics...</div>
+
+    <div class="segment-breakdown" *ngIf="segmentData.length > 0 && !loading">
+      <h4>Segment Breakdown</h4>
+      <div class="segment-grid">
+        <div class="segment-card" *ngFor="let segment of segmentData">
+          <div class="segment-name">{{segment.name}}</div>
+          <div class="segment-count">{{segment.count}} leads</div>
+          <div class="segment-percentage">{{segment.percentage}}%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="performance-summary">
+      <h4>Performance Summary</h4>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">Campaign Duration:</span>
+          <span class="summary-value">{{getCampaignDuration()}} days</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Agency:</span>
+          <span class="summary-value">{{campaign.agency || 'Not assigned'}}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Buyer:</span>
+          <span class="summary-value">{{campaign.buyer || 'Not assigned'}}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Brand:</span>
+          <span class="summary-value">{{campaign.brand || 'Not assigned'}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" (click)="exportAnalytics()">Export</button>
+      <button class="btn btn-primary" (click)="onClose()">Close</button>
+    </div>
+  </div>
+</div>
